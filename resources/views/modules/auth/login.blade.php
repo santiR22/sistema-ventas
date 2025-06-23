@@ -27,13 +27,13 @@
                                         <p class="text-center small">Ingresa tu email y contraseña para acceder</p>
                                     </div>
 
-                                    <form class="row g-3 needs-validation" novalidate>
-
+                                    <form class="row g-3 needs-validation" novalidate method="POST"
+                                        action="{{ route('logear') }}">
+                                        @csrf
                                         <div class="col-12">
                                             <label for="yourUsername" class="form-label">Email</label>
                                             <div class="input-group has-validation">
-                                                <input type="text" name="email" class="form-control" id="email"
-                                                    required>
+                                                <input type="text" name="email" class="form-control" id="email" required>
                                                 <div class="invalid-feedback">Please enter your username.</div>
                                             </div>
                                         </div>
@@ -50,7 +50,20 @@
                                             <button class="btn btn-primary w-100" type="submit">Login</button>
                                         </div>
                                     </form>
-
+                                    {{-- Validacion del login --}}
+                                    @if ($errors->any())
+                                        {{-- <div class="alert alert-danger mt-3">
+                                            {{ session('error') }}
+                                        </div> --}}
+                                        <div class="alert alert-danger mt-3">
+                                            <ul>
+                                                @foreach ($errors->all() as $error)
+                                                    <li>{{ $error }}</li>
+                                                @endforeach
+                                            </ul>
+                                        </div>
+                                    @endif
+                                    {{-- Fin de la validacion del login --}}
                                 </div>
                             </div>
                         </div>

@@ -10,7 +10,21 @@ use App\Http\Controllers\Usuarios;
 use App\Http\Controllers\Ventas;
 use Illuminate\Support\Facades\Route;
 
+//crear un usuario admin, solo una vez
+Route::get('/crear-admin', [AuthController::class, 'createAdmin']);
+
+Route::middleware(['auth'])->group(function () {
+    // Rutas protegidas que requieren autenticación
+    Route::get('/dashboard', [Dashboard::class, 'index'])->name('dashboard');
+});
+
 Route::get('/', [AuthController::class, 'index'])->name('login');
+Route::post('/login', [AuthController::class, 'login'])->name('logear');
+
+//logout route
+Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+
+
 Route::get('/home', [Dashboard::class, 'index'])->name('home');
 
 Route::prefix('ventas')->group(function () {
