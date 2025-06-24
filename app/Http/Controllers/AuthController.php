@@ -23,6 +23,7 @@ class AuthController extends Controller
             'password' => 'required',
         ]);
 
+        //buscar el email
         $user = User::where('email', $request->email)->first();
 
         //validar usuario y contraseña

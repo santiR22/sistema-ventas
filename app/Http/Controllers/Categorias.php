@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Categoria;
+use Auth;
 use Illuminate\Http\Request;
 
 class Categorias extends Controller
@@ -11,8 +13,9 @@ class Categorias extends Controller
      */
     public function index()
     {
-
-        return view('modules.categorias.index');
+        $titulo = 'Administrar Categorias';
+        $items = Categoria::all();
+        return view('modules.categorias.index', compact('titulo', 'items'));
 
     }
 
@@ -21,7 +24,8 @@ class Categorias extends Controller
      */
     public function create()
     {
-        //
+        $titulo = 'Crear Categoria';
+        return view('modules.categorias.create', compact('titulo'));
     }
 
     /**
@@ -29,7 +33,11 @@ class Categorias extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $item = new Categoria(); // Crear una nueva instancia del modelo Categoria
+        $item->user_id = Auth::user()->id;// Asignar el ID del usuario autenticado
+        $item->nombre = $request->input('nombre');// Obtener el nombre de la categoría del formulario
+        $item->save(); // Guardar la categoría en la base de datos
+        return to_route("categorias");
     }
 
     /**
@@ -37,7 +45,9 @@ class Categorias extends Controller
      */
     public function show(string $id)
     {
-        //
+        $titulo = "Detalles de la Categoría";
+        $item = Categoria::find($id); // Buscar la categoría por ID
+        return view('modules.categorias.show', compact('item', 'titulo')); // Pasar la categoría a la vista
     }
 
     /**
@@ -45,7 +55,9 @@ class Categorias extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $titulo = 'Editar Categoria';
+        $item = Categoria::find($id); // Buscar la categoría por ID
+        return view('modules.categorias.edit', compact('titulo', 'item'));
     }
 
     /**
@@ -53,7 +65,10 @@ class Categorias extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $item = Categoria::find($id);
+        $item->nombre = $request->input('nombre');
+        $item->save(); // Guardar los cambios en la categoría
+        return to_route('categorias');
     }
 
     /**
@@ -61,6 +76,8 @@ class Categorias extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $item = Categoria::find($id);
+        $item->delete();
+        return to_route('categorias');
     }
 }
